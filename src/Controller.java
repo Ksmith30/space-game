@@ -1,6 +1,4 @@
-
-import javax.security.auth.kerberos.KerberosTicket;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.awt.event.KeyListener;
@@ -11,6 +9,7 @@ class Controller implements KeyListener
     Model model;
     View view;
     private ArrayList<Sprite> sprites;
+    private int points;
 
     Controller() throws IOException, Exception {
         model = new Model();
@@ -31,9 +30,21 @@ class Controller implements KeyListener
         if (e.getKeyCode() == KeyEvent.VK_S) {
             model.initialize();
         } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-
+            model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_RIGHT);
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+            model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_LEFT);
+        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+            model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_UP);
+        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_DOWN);
         }
+
+        points = model.getPoints();
+        view.setNumberOfPoints(points);
+        view.setBackground(Color.BLACK);
+        view.repaint();
     }
+
     public void keyReleased(KeyEvent e) {  }
 
 

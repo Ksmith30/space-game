@@ -1,12 +1,12 @@
 import java.awt.Graphics;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-class Model
-{
+class Model {
     private Sprite sprite;
     private ArrayList<Sprite> sprites;
+    private Plane plane;
+    private static int points = 0;
 
     Model() throws IOException {
         initialize();
@@ -22,6 +22,20 @@ class Model
         }
     }
 
+    public void updateScene(int width, int height, int direction) {
+        plane.drive(direction);
+        for (int i = 0; i < sprites.size(); ++i) {
+            if (sprites.get(i) instanceof Star) {
+                ((Star) sprites.get(i)).drive();
+
+                if (sprites.get(i).overlaps(plane)) {
+                    sprites.remove(i);
+                    points++;
+                }
+            }
+        }
+    }
+
     public ArrayList<Sprite> getSpriteArray() {
         return sprites;
     }
@@ -30,12 +44,17 @@ class Model
         sprites = new ArrayList<>();
         sprite = new Moon();
         sprites.add(sprite);
-        sprite = new Plane();
-        sprites.add(sprite);
-        for (int i = 0; i < 50; ++i) {
+        plane = new Plane();
+        sprites.add(plane);
+        for (int i = 0; i < 20; ++i) {
             sprite = new Star();
             sprites.add(sprite);
         }
+        points = 0;
+    }
+
+    public int getPoints() {
+        return points;
     }
 
 }
