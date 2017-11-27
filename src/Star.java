@@ -24,17 +24,19 @@ public class Star extends Sprite {
     }
 
     public void updateState(int width, int height) {
-    }
-
-    public void drive() {
         double z = Math.sqrt((xRatio * xRatio) + (yRatio * yRatio));
         int x = getX();
         int y = getY();
+        if (x <= 0 || x >= width - 20) {
+            xRatio *= -1;
+        }
+        if (y <= 0 || y >= height - 20) {
+            yRatio *= -1;
+        }
         x += (int) ((10 / z) * xRatio);
         y += (int) ((10 / z) * yRatio);
         setX(x);
         setY(y);
     }
-
 
 }

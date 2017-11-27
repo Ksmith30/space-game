@@ -46,8 +46,8 @@ class Sprite
     }
 
     public boolean overlaps(Sprite s) {
-        return (locationX < s.getX() + 60) && (locationX + 60 > s.getX()) && (locationY < s.getY() + 60)
-                && (locationY + 60 > s.getY());
+        return (locationX < s.getX() + 20) && (locationX + 20 > s.getX()) && (locationY < s.getY() + 20)
+                && (locationY + 20 > s.getY());
     }
 
 }

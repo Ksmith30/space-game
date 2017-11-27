@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 public class Plane extends Sprite {
     private static int PLANE_WIDTH = 30;
     private static int PLANE_HEIGHT = 30;
-    private static int speed = 5;
+    private static int speed = 10;
 
     public Plane() {
         super("Rocket-ship-Clip-Art.png", PLANE_WIDTH, PLANE_HEIGHT);

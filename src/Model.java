@@ -9,10 +9,14 @@ class Model {
     private static int points = 0;
 
     Model() throws IOException {
-        initialize();
+        sprites = new ArrayList<>();
+        sprite = new Moon();
+        sprites.add(sprite);
+        plane = new Plane();
+        sprites.add(plane);
     }
 
-    public void addToScreen(int x, int y) {
+    public void addToScreen(int width, int height) {
 
     }
 
@@ -23,14 +27,15 @@ class Model {
     }
 
     public void updateScene(int width, int height, int direction) {
-        plane.drive(direction);
-        for (int i = 0; i < sprites.size(); ++i) {
-            if (sprites.get(i) instanceof Star) {
-                ((Star) sprites.get(i)).drive();
-
-                if (sprites.get(i).overlaps(plane)) {
-                    sprites.remove(i);
-                    points++;
+        synchronized (this) {
+            plane.drive(direction);
+            for (int i = 0; i < sprites.size(); ++i) {
+                if (sprites.get(i) instanceof Star) {
+                    (sprites.get(i)).updateState(width, height);
+                    if (sprites.get(i).overlaps(plane)) {
+                        sprites.remove(i);
+                        points++;
+                    }
                 }
             }
         }
@@ -40,7 +45,7 @@ class Model {
         return sprites;
     }
 
-    public void initialize() {
+    public void initialize(int width, int height) {
         sprites = new ArrayList<>();
         sprite = new Moon();
         sprites.add(sprite);

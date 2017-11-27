@@ -10,10 +10,14 @@ class Controller implements KeyListener
     View view;
     private ArrayList<Sprite> sprites;
     private int points;
+    SpriteMover spriteMover;
+    Thread th;
+    private ArrayList<Thread> threads;
 
     Controller() throws IOException, Exception {
         model = new Model();
         view = new View(this);
+        threads = new ArrayList<>();
     }
 
     public void update(Graphics g) {
@@ -26,20 +30,47 @@ class Controller implements KeyListener
     }
 
     public void keyPressed(KeyEvent e) {
-        // Start Key
-        if (e.getKeyCode() == KeyEvent.VK_S) {
-            model.initialize();
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_RIGHT);
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_LEFT);
-        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
-            model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_UP);
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_DOWN);
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_R:
+                spriteMover = new SpriteMover(model, view);
+                th = new Thread(spriteMover);
+                threads.add(th);
+                th.start();
+                view.setPause(false);
+                break;
+            case KeyEvent.VK_RIGHT:
+                model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_RIGHT);
+                break;
+            case KeyEvent.VK_LEFT:
+                model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_LEFT);
+                break;
+            case KeyEvent.VK_UP:
+                model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_UP);
+                break;
+            case KeyEvent.VK_DOWN:
+                model.updateScene(view.getWidth(), view.getHeight(), KeyEvent.VK_DOWN);
+                break;
+            case KeyEvent.VK_P:
+                for (int i = 0; i < threads.size() ; ++i) {
+                    threads.get(i).interrupt();
+                }
+                view.setPause(true);
+                break;
+            case KeyEvent.VK_SPACE:
+                view.setPause(false);
+                view.setStart(false);
+                model.initialize(view.getWidth(), view.getHeight());
+                spriteMover = new SpriteMover(model, view);
+                th = new Thread(spriteMover);
+                threads.add(th);
+                th.start();
+                break;
         }
 
         points = model.getPoints();
+        if (points >= 20) {
+            view.assertWin();
+        }
         view.setNumberOfPoints(points);
         view.setBackground(Color.BLACK);
         view.repaint();
